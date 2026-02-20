@@ -2,358 +2,168 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Raspa y Gana</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>La Red - Panel Admin</title>
 <style>
-:root{
-  --bg:#f6f7fb;
-  --card:#ffffff;
-  --primary:#ffb703;
-  --secondary:#219ebc;
-  --success:#2a9d8f;
-  --danger:#e63946;
-  --text:#333;
-}
-
 body{
-  margin:0;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  background: linear-gradient(135deg,#fefae0,#e9f5ff);
-  color:var(--text);
-  text-align:center;
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    padding:20px;
 }
-
-header{
-  padding:20px;
+input, button{
+    padding:8px;
+    margin:5px;
+    border-radius:6px;
+    border:none;
 }
-
-h1{ margin:0; }
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-
 button{
-  cursor:pointer;
+    background:#22c55e;
+    color:white;
+    cursor:pointer;
+}
+button:hover{opacity:0.8;}
+
+.usuario{
+    background:#1e293b;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
 }
 
-#startBtn{
-  background:var(--primary);
-  border:none;
-  padding:15px 35px;
-  font-size:1.1em;
-  border-radius:30px;
-  box-shadow:0 6px 15px rgba(0,0,0,.15);
+.arbol{
+    margin-left:20px;
+    border-left:2px solid #334155;
+    padding-left:10px;
+    margin-top:5px;
 }
 
-#timer{
-  margin-top:15px;
-  font-size:1.1em;
-  font-weight:bold;
+#panelAdmin{display:none;}
+#historial{
+    background:#111827;
+    padding:10px;
+    margin-top:15px;
+    border-radius:8px;
+    display:none;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
-  gap:15px;
-  margin-top:30px;
-}
-
-.card{
-  background:var(--card);
-  border-radius:16px;
-  height:110px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  box-shadow:0 8px 20px rgba(0,0,0,.1);
-  font-weight:bold;
-  transition:.3s;
-}
-
-.card.disabled{
-  pointer-events:none;
-  opacity:.4;
-}
-
-#scratchZone{
-  display:none;
-  margin-top:30px;
-}
-
-#scratchCard{
-  width:280px;
-  height:180px;
-  border-radius:20px;
-  background:#fff;
-  margin:auto;
-  position:relative;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-}
-
-#resultText{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.2em;
-  font-weight:bold;
-  padding:10px;
-}
-
-canvas{
-  position:absolute;
-  inset:0;
-  border-radius:20px;
-}
-
-#final{
-  display:none;
-  margin-top:25px;
-}
-
-#whatsappBtn{
-  background:var(--success);
-  color:#fff;
-  border:none;
-  padding:15px 30px;
-  border-radius:30px;
-  font-size:1.1em;
-}
-
-#overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  color:#fff;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-  font-size:1.6em;
-}
-
-/* ADMIN */
-#adminBtn{
-  position:fixed;
-  bottom:15px;
-  right:15px;
-  background:#000;
-  color:#fff;
-  border:none;
-  padding:10px 15px;
-  border-radius:20px;
-  font-size:.9em;
-}
-
-#adminPanel{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:1000;
-  align-items:center;
-  justify-content:center;
-}
-
-#adminBox{
-  background:#fff;
-  padding:25px;
-  border-radius:15px;
-  width:300px;
-  text-align:left;
-}
-
-#adminBox input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
+#loginBox{
+    background:#1e293b;
+    padding:20px;
+    border-radius:10px;
+    max-width:300px;
 }
 </style>
 </head>
-
 <body>
 
-<header>
-  <h1>🎟️ Raspa y Gana</h1>
-  <p>Elige una tarjeta y prueba tu suerte</p>
-</header>
+<h1>LA RED</h1>
 
-<div class="container">
-  <button id="startBtn">Empezar</button>
-  <div id="timer"></div>
-
-  <div class="grid" id="grid"></div>
-
-  <div id="scratchZone">
-    <div id="scratchCard">
-      <div id="resultText"></div>
-      <canvas id="canvas"></canvas>
-    </div>
-  </div>
-
-  <div id="final">
-    <p id="finalMsg"></p>
-    <button id="whatsappBtn">📲 Enviar por WhatsApp</button>
-  </div>
+<div id="loginBox">
+    <h3>Acceso Administrador</h3>
+    <input type="password" id="password" placeholder="Ingrese contraseña">
+    <button onclick="login()">Entrar</button>
 </div>
 
-<div id="overlay">⛔ Página cerrada</div>
+<div id="panelAdmin">
+    <h3>Panel Administrativo</h3>
+    <input type="text" id="nombre" placeholder="Nombre del nuevo miembro">
+    <input type="text" id="refiere" placeholder="Nombre de quien lo refirió">
+    <button onclick="agregar()">Agregar Miembro</button>
 
-<button id="adminBtn">ADMIN</button>
+    <h2>Directorio</h2>
+    <div id="directorio"></div>
 
-<div id="adminPanel">
-  <div id="adminBox">
-    <h3>Panel Administrador</h3>
-    <input id="adminEmail" placeholder="Correo">
-    <input id="adminHour" type="time">
-    <button onclick="guardarHora()">Guardar hora cierre</button>
-    <button onclick="cerrarAdmin()">Cerrar</button>
-  </div>
+    <button onclick="toggleHistorial()">Mostrar / Ocultar Historial</button>
+    <div id="historial"></div>
 </div>
 
 <script>
-/* ===== PREMIOS ===== */
-const premios=[
-"$500","$600","$1,000","$10,000","$30,000",
-"$10,000 mensuales x 12 meses",
-"$5,000 mensuales x 6 meses",
-"$7,000 semanales x 6 meses",
-"PREMIO ESPECIAL"
-];
 
-let cartas=premios.concat(Array(21).fill("SIN PREMIO"));
-cartas.sort(()=>Math.random()-0.5);
+const ADMIN_PASS = "daryallen99@gmail.com";
 
-/* ===== TEMPORIZADOR 5 MIN ===== */
-let tiempo=300;
-let timerInterval;
+let red = JSON.parse(localStorage.getItem("red")) || {};
+let historial = JSON.parse(localStorage.getItem("historial")) || [];
 
-function iniciarTimer(){
-  timerInterval=setInterval(()=>{
-    tiempo--;
-    let m=Math.floor(tiempo/60);
-    let s=tiempo%60;
-    document.getElementById("timer").innerText=
-      `⏱️ Tiempo restante: ${m}:${s.toString().padStart(2,"0")}`;
-    if(tiempo<=0) cerrarTodo();
-  },1000);
-}
-
-/* ===== TARJETAS ===== */
-const grid=document.getElementById("grid");
-let premioFinal="";
-
-document.getElementById("startBtn").onclick=()=>{
-  document.getElementById("startBtn").disabled=true;
-  iniciarTimer();
-  for(let i=0;i<30;i++){
-    let c=document.createElement("div");
-    c.className="card";
-    c.innerText="🎫";
-    c.onclick=()=>elegir(c,i);
-    grid.appendChild(c);
-  }
-};
-
-function elegir(card,i){
-  document.querySelectorAll(".card").forEach(c=>{
-    if(c!==card) c.classList.add("disabled");
-  });
-  premioFinal=cartas[i];
-  document.getElementById("scratchZone").style.display="block";
-  iniciarRaspado();
-}
-
-/* ===== RASPADO ===== */
-function iniciarRaspado(){
-  const canvas=document.getElementById("canvas");
-  const ctx=canvas.getContext("2d");
-  canvas.width=280; canvas.height=180;
-
-  document.getElementById("resultText").innerText=
-    premioFinal==="SIN PREMIO"
-    ? "❌ No tuviste suerte"
-    : "🎉 Ganaste "+premioFinal;
-
-  ctx.fillStyle="#cfd8dc";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  let ras=0;
-  function raspar(e){
-    let r=canvas.getBoundingClientRect();
-    let x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
-    let y=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
-    ctx.globalCompositeOperation="destination-out";
-    ctx.beginPath(); ctx.arc(x,y,18,0,Math.PI*2); ctx.fill();
-    ras++;
-    if(ras>120){
-      canvas.onmousemove=null;
-      canvas.ontouchmove=null;
-      finalizar();
+function login(){
+    let pass = document.getElementById("password").value;
+    if(pass === ADMIN_PASS){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("panelAdmin").style.display="block";
+        actualizarVista();
+    } else {
+        alert("Contraseña incorrecta");
     }
-  }
-  canvas.onmousemove=raspar;
-  canvas.ontouchmove=raspar;
 }
 
-function finalizar(){
-  document.getElementById("final").style.display="block";
-  document.getElementById("finalMsg").innerText=
-    premioFinal==="SIN PREMIO"
-    ? "❌ No tuviste suerte esta vez"
-    : "🏆 Premio obtenido: "+premioFinal;
+function guardar(){
+    localStorage.setItem("red", JSON.stringify(red));
+    localStorage.setItem("historial", JSON.stringify(historial));
 }
 
-/* ===== WHATSAPP ===== */
-document.getElementById("whatsappBtn").onclick=()=>{
-  let msg=premioFinal==="SIN PREMIO"
-    ? "🎟️ Raspa y Gana%0A❌ No tuve suerte"
-    : "🎉 Raspa y Gana%0A🏆 Gané: "+premioFinal;
-  window.open("https://wa.me/58752291?text="+msg,"_blank");
-};
+function agregar(){
+    let nombre = document.getElementById("nombre").value.trim();
+    let refiere = document.getElementById("refiere").value.trim();
 
-/* ===== CIERRE TOTAL ===== */
-function cerrarTodo(){
-  clearInterval(timerInterval);
-  document.getElementById("overlay").style.display="flex";
-  document.querySelectorAll("button").forEach(b=>b.disabled=true);
+    if(!nombre) return alert("Ingresa un nombre");
+
+    if(red[nombre]){
+        alert("Ese miembro ya existe");
+        return;
+    }
+
+    red[nombre] = {
+        referidos: [],
+        ganancias: 0
+    };
+
+    if(refiere && red[refiere]){
+        red[refiere].referidos.push(nombre);
+        red[refiere].ganancias += 0.20;
+        historial.push(`${nombre} fue referido por ${refiere}. ${refiere} ganó 0.20 USDT.`);
+    } else {
+        historial.push(`${nombre} ingresó sin referente.`);
+    }
+
+    guardar();
+    actualizarVista();
+    document.getElementById("nombre").value="";
+    document.getElementById("refiere").value="";
 }
 
-/* ===== ADMIN ===== */
-document.getElementById("adminBtn").onclick=()=>{
-  document.getElementById("adminPanel").style.display="flex";
-};
+function actualizarVista(){
+    let cont = document.getElementById("directorio");
+    cont.innerHTML = "";
 
-function cerrarAdmin(){
-  document.getElementById("adminPanel").style.display="none";
+    for(let miembro in red){
+        let div = document.createElement("div");
+        div.className="usuario";
+
+        div.innerHTML=`
+            <strong>${miembro}</strong><br>
+            Personas que llevó: ${red[miembro].referidos.length}<br>
+            Ganancias acumuladas: ${red[miembro].ganancias.toFixed(2)} USDT
+            <div class="arbol">
+                ${red[miembro].referidos.map(r => "↳ " + r).join("<br>")}
+            </div>
+        `;
+
+        cont.appendChild(div);
+    }
+
+    actualizarHistorial();
 }
 
-function guardarHora(){
-  const email=document.getElementById("adminEmail").value;
-  const hora=document.getElementById("adminHour").value;
-  if(email!=="daryallen99@gmail.com") return alert("Acceso denegado");
-  localStorage.setItem("horaCierre",hora);
-  alert("Hora guardada");
-  cerrarAdmin();
+function actualizarHistorial(){
+    let h = document.getElementById("historial");
+    h.innerHTML = historial.map(e => `<p>${e}</p>`).join("");
 }
 
-/* ===== VERIFICAR HORA ===== */
-setInterval(()=>{
-  const h=localStorage.getItem("horaCierre");
-  if(!h) return;
-  const ahora=new Date();
-  const [hh,mm]=h.split(":");
-  if(ahora.getHours()==hh && ahora.getMinutes()==mm){
-    cerrarTodo();
-  }
-},10000);
+function toggleHistorial(){
+    let h = document.getElementById("historial");
+    h.style.display = h.style.display === "none" ? "block" : "none";
+}
+
 </script>
 
 </body>
-  </html>
+</html>
